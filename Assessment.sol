@@ -37,12 +37,7 @@ contract Assessment {
         emit Deposit(_amount);
     }
 
-    function transfer(address recipient, uint amount) public {
-        // require(balances[msg.sender] >= amount, "Insufficient balance");
-
-        balances[msg.sender] -= amount;
-        balances[recipient] += amount;
-    }
+   
 
     // custom error
     error InsufficientBalance(uint256 balance, uint256 withdrawAmount);
