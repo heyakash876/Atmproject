@@ -38,7 +38,7 @@ npx hardhat node
    
 (5) In the third terminal, type:
 ```bash
-npx hardhat run --network localhost scripts/deploy.js.
+npx hardhat run --network localhost scripts/deploy.js
 ```
 After this command you will get a prompt of a port directly click on make public.
 (6) Now, go back to the first terminal and type:
