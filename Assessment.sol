@@ -7,10 +7,11 @@ contract Assessment {
     address payable public owner;
     uint256 public balance;
     mapping(address => uint256) private userAccount;
-    mapping(address => uint) public balances;
+     mapping(address => uint256) private balances;
     event Deposit(uint256 amount);
     event Withdraw(uint256 amount);
     event BalanceMultiplied(uint256 previousBalance, uint256 newBalance);
+    mapping(address => bool) private activeAccounts;
 
     constructor(uint initBalance) payable {
         owner = payable(msg.sender);
@@ -24,7 +25,7 @@ contract Assessment {
     function deposit(uint256 _amount) public payable {
         uint _previousBalance = balance;
 
-        // make sure this is the owner
+        // makes sure this is the owner
         require(msg.sender == owner, "You are not the owner of this account");
 
         // perform transaction
@@ -37,7 +38,7 @@ contract Assessment {
         emit Deposit(_amount);
     }
 
-   
+  
 
     // custom error
     error InsufficientBalance(uint256 balance, uint256 withdrawAmount);
@@ -77,4 +78,11 @@ contract Assessment {
         // emit the event
         emit BalanceMultiplied(_previousBalance, balance);
     }
+    function canAfford(uint256 amount) public view returns (bool) {
+        return balances[msg.sender] >= amount; 
+    }
+     function isActiveAccount() public view returns (bool) {
+        return activeAccounts[msg.sender];
+    }
 }
+
