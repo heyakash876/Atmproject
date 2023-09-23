@@ -8,8 +8,10 @@ export default function HomePage() {
   const [account, setAccount] = useState(undefined);
   const [atm, setATM] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
+  const [canAfford, setCanAfford] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   
-
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const atmABI = atm_abi.abi;
 
@@ -114,6 +116,28 @@ export default function HomePage() {
       }
     }
   };
+  async function checkAffordability() {
+    if (atm) {
+      setLoading(true);
+      try {
+        let result = await atm.canAfford(1);
+        setCanAfford(result); // Update the state variable with the result
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
+    }
+  }
+  async function checkIsActive() {
+    if (atm) {
+      try {
+        let result = await atm.isActiveAccount();
+        setIsActive(result);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   const initUser = () => {
     // Check to see if user has Metamask
@@ -150,7 +174,20 @@ export default function HomePage() {
         </div>
         <label>Multiply : </label>
         <button onClick={multiplyValue}> 2x</button>
+        <div>
+        <button onClick={checkAffordability}>Check if I can afford 1 ETH transaction</button>
+      {loading ? <p>Loading...</p> : null}
+      {canAfford !== null ? (
+        <p>{checkAffordability?'You can afford this transaction' : 'You cannot afford this transaction'}</p>
+      ) : null}
+      <div>
+      <button onClick={checkIsActive}>Check if my account is active</button>
+      <p>{ checkIsActive ? 'Your account is active' : 'Your account is not active'}</p>
+    </div>
+    </div>
+        
       </div>
+      
     );
   };
 
